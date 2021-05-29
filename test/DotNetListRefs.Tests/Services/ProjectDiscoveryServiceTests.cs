@@ -7,6 +7,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 
 using DotNetListRefs.Exceptions;
+using DotNetListRefs.Models;
 using DotNetListRefs.Services;
 using FluentAssertions;
 using Xunit;
@@ -24,6 +25,7 @@ namespace DotNetListRefs.Tests.Services
         private const string EmptyDir = "/home/user/pending";
 
         private readonly ProjectDiscoveryService service;
+        private readonly RefGraph graph;
 
         public ProjectDiscoveryServiceTests()
         {
@@ -36,20 +38,21 @@ namespace DotNetListRefs.Tests.Services
             });
 
             service = new ProjectDiscoveryService(fileSystem);
+
+            graph = new RefGraph();
         }
 
 
         [Theory]
-        [InlineData(Project1)]
-        [InlineData(Solution1)]
-        public void ExplicitItemsReturnsItem(string path)
+        [InlineData(Project1, typeof(ProjectNode))]
+        [InlineData(Solution1, typeof(SolutionNode))]
+        public void ExplicitItemsReturnsItem(string path, Type expectedType)
         {
             // Act
-            var projects = service.DiscoverProjects(path, false);
+            service.DiscoverProjects(path, graph);
 
             // Assert
-            projects.Should().HaveCount(1);
-            projects.First().Should().Be(path);
+            VerifySingleNode(path, expectedType);
         }
 
 
@@ -57,7 +60,7 @@ namespace DotNetListRefs.Tests.Services
         public void EmptyDirectoryThrows()
         {
             // Arrange
-            Action act = () => service.DiscoverProjects(EmptyDir, false);
+            Action act = () => service.DiscoverProjects(EmptyDir, graph);
 
             // Act
             act.Should().Throw<CommandLineArgumentException>()
@@ -69,7 +72,7 @@ namespace DotNetListRefs.Tests.Services
         public void NonExistantPathThrows()
         {
             // Arrange
-            Action act = () => service.DiscoverProjects(NoPath, false);
+            Action act = () => service.DiscoverProjects(NoPath, graph);
 
             // Act
             act.Should().Throw<CommandLineArgumentException>()
@@ -77,16 +80,34 @@ namespace DotNetListRefs.Tests.Services
         }
 
         [Theory]
-        [InlineData(Dir1, Solution1)]
-        [InlineData(Dir2, Project2)]
-        public void DirectoryWithStuffReturnsStuff(string path, string expectedItem)
+        [InlineData(Dir1, Solution1, typeof(SolutionNode))]
+        [InlineData(Dir2, Project2, typeof(ProjectNode))]
+        public void DirectoryWithStuffReturnsStuff(string path, string expectedPath, Type expectedType)
         {
             // Act
-            var projects = service.DiscoverProjects(path, false);
+            service.DiscoverProjects(path, graph);
 
             // Assert
-            projects.Should().HaveCount(1);
-            projects.First().Should().Be(expectedItem);
+            VerifySingleNode(expectedPath, expectedType);
+        }
+
+
+        private void VerifySingleNode(string expectedPath, Type expectedType)
+        {
+            graph.Nodes.Should().HaveCount(1);
+
+            var node = graph.Nodes.First();
+
+            node.Should().BeOfType(expectedType);
+
+            if (node is SolutionNode sln)
+            {
+                sln.Path.Should().Be(expectedPath);
+            }
+            else if (node is ProjectNode proj)
+            {
+                proj.Path.Should().Be(expectedPath);
+            }
         }
     }
 }

@@ -3,10 +3,10 @@
 
 using DotNetListRefs.Models;
 
-namespace DotNetListRefs.Services
+namespace DotNetListRefs.Writers
 {
-    public interface IProjectDiscoveryService
+    public interface IGraphWriter
     {
-        void DiscoverProjects(string path, RefGraph graph);
+        void Write(RefGraph graph, string path);
     }
 }

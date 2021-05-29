@@ -5,29 +5,42 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+using DotNetListRefs.Models;
 using DotNetListRefs.Services;
+using DotNetListRefs.Writers;
 
 namespace DotNetListRefs
 {
     public class App
     {
         private readonly IProjectDiscoveryService projectDiscoveryService;
+        private readonly IGraphWriter graphWriter;
 
-        public App(IProjectDiscoveryService projectDiscoveryService)
+        public App(IProjectDiscoveryService projectDiscoveryService,
+                   IGraphWriter graphWriter)
         {
             this.projectDiscoveryService = projectDiscoveryService;
+            this.graphWriter = graphWriter;
         }
 
 
         public async Task RunAsync(Options options, CancellationToken cancellationToken)
         {
-            // Get the list of project paths that will be the starting point
-            var projectPaths = projectDiscoveryService.DiscoverProjects(options.Path, options.Recursive);
+            // Create the graph that will be populated.
+            var graph = new RefGraph();
 
-            // TODO - for the moment, just dump out the projects.
-            foreach (var proj in projectPaths)
+            // Get the list of project paths that will be the starting point
+            projectDiscoveryService.DiscoverProjects(options.Path, graph);
+
+            // Visit all the project/solution nodes, and expand them.
+            // TODO
+
+            // TODO - add more stuff (nuget, etc) to the graph
+
+            // If desired, dump the graph
+            if (!string.IsNullOrEmpty(options.GraphFile))
             {
-                Console.WriteLine("Artifact: {0}", proj);
+                graphWriter.Write(graph, options.GraphFile);
             }
 
             // TODO - implement me!

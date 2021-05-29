@@ -4,6 +4,7 @@
 using System.IO.Abstractions;
 
 using DotNetListRefs.Services;
+using DotNetListRefs.Writers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotNetListRefs
@@ -16,6 +17,9 @@ namespace DotNetListRefs
 
             services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
             services.AddSingleton<IFileSystem, FileSystem>();
+
+            // TODO - based on the output type settings, add the proper writer
+            services.AddSingleton<IGraphWriter, TextGraphWriter>();
         }
     }
 }

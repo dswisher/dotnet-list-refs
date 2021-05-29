@@ -8,13 +8,15 @@ using System.IO.Abstractions;
 using System.Linq;
 
 using DotNetListRefs.Exceptions;
+using DotNetListRefs.Models;
 
 namespace DotNetListRefs.Services
 {
     public class ProjectDiscoveryService : IProjectDiscoveryService
     {
         private readonly IFileSystem fileSystem;
-        private readonly string[] desiredExtensions = new string[] { ".csproj", ".fsproj", ".sln" };
+        private readonly string[] projectExtensions = new string[] { ".csproj", ".fsproj" };
+        private readonly string[] solutionExtensions = new string[] { ".sln" };
 
         public ProjectDiscoveryService(IFileSystem fileSystem)
         {
@@ -22,7 +24,7 @@ namespace DotNetListRefs.Services
         }
 
 
-        public IList<string> DiscoverProjects(string path, bool recursive)
+        public void DiscoverProjects(string path, RefGraph graph)
         {
             // If the path is empty, use the current directory.
             if (string.IsNullOrEmpty(path))
@@ -41,14 +43,13 @@ namespace DotNetListRefs.Services
 
             if (fileAttributes.HasFlag(FileAttributes.Directory))
             {
-                // TODO - implement recursive search
-
                 // Look for solution files
                 var solutionFiles = fileSystem.Directory.GetFiles(path, "*.sln");
 
                 if (solutionFiles.Length == 1)
                 {
-                    return new List<string> { fileSystem.Path.GetFullPath(solutionFiles[0]) };
+                    AddSolutionNode(graph, fileSystem.Path.GetFullPath(solutionFiles[0]));
+                    return;
                 }
 
                 if (solutionFiles.Length > 1)
@@ -64,7 +65,8 @@ namespace DotNetListRefs.Services
 
                 if (projectFiles.Count == 1)
                 {
-                    return new List<string> { fileSystem.Path.GetFullPath(projectFiles[0]) };
+                    AddProjectNode(graph, fileSystem.Path.GetFullPath(projectFiles[0]));
+                    return;
                 }
 
                 if (projectFiles.Count > 1)
@@ -75,14 +77,43 @@ namespace DotNetListRefs.Services
             else
             {
                 // Not a directory, so must be a file? If it is a project or solution, use it.
-                if (desiredExtensions.Contains(fileSystem.Path.GetExtension(path).ToLower()))
+                if (solutionExtensions.Contains(fileSystem.Path.GetExtension(path).ToLower()))
                 {
-                    return new List<string> { path };
+                    AddSolutionNode(graph, fileSystem.Path.GetFullPath(path));
+                    return;
+                }
+
+                if (projectExtensions.Contains(fileSystem.Path.GetExtension(path).ToLower()))
+                {
+                    AddProjectNode(graph, fileSystem.Path.GetFullPath(path));
+                    return;
                 }
             }
 
             // At this point, we didn't find anything, so throw.
             throw new CommandLineArgumentException("Could not locate a project or solution starting from '{0}'.", path);
+        }
+
+
+        private void AddSolutionNode(RefGraph graph, string path)
+        {
+            var node = new SolutionNode
+            {
+                Path = path
+            };
+
+            graph.AddNode(node);
+        }
+
+
+        private void AddProjectNode(RefGraph graph, string path)
+        {
+            var node = new ProjectNode
+            {
+                Path = path
+            };
+
+            graph.AddNode(node);
         }
     }
 }
