@@ -2,25 +2,29 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 
 using DotNetListRefs.Exceptions;
 using DotNetListRefs.Models;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetListRefs.Services
 {
     public class ProjectDiscoveryService : IProjectDiscoveryService
     {
         private readonly IFileSystem fileSystem;
+        private readonly ILogger logger;
+
         private readonly string[] projectExtensions = new string[] { ".csproj", ".fsproj" };
         private readonly string[] solutionExtensions = new string[] { ".sln" };
 
-        public ProjectDiscoveryService(IFileSystem fileSystem)
+        public ProjectDiscoveryService(IFileSystem fileSystem,
+                                       ILogger<ProjectDiscoveryService> logger)
         {
             this.fileSystem = fileSystem;
+            this.logger = logger;
         }
 
 
@@ -37,6 +41,8 @@ namespace DotNetListRefs.Services
             {
                 throw new CommandLineArgumentException("The directory or file '{0}' does not exist.", path);
             }
+
+            logger.LogDebug("Scanning for projects/solutions, path: {Path}.", path);
 
             // If the path is a directory, do some scanning, otherwise process a file.
             var fileAttributes = fileSystem.File.GetAttributes(path);
@@ -97,10 +103,7 @@ namespace DotNetListRefs.Services
 
         private void AddSolutionNode(RefGraph graph, string path)
         {
-            var node = new SolutionNode
-            {
-                Path = path
-            };
+            var node = new SolutionNode(path);
 
             graph.AddNode(node);
         }
@@ -108,10 +111,7 @@ namespace DotNetListRefs.Services
 
         private void AddProjectNode(RefGraph graph, string path)
         {
-            var node = new ProjectNode
-            {
-                Path = path
-            };
+            var node = new ProjectNode(path);
 
             graph.AddNode(node);
         }

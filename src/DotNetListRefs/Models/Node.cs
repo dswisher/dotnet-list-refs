@@ -9,13 +9,15 @@ namespace DotNetListRefs.Models
     {
         private static int nextId = 1;
 
-        protected Node()
+        protected Node(string name)
         {
+            Name = name;
             Id = nextId++;
         }
 
 
         public int Id { get; private set; }
+        public string Name { get; private set; }
 
         public abstract void Write(StreamWriter writer);
     }

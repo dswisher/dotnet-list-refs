@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DotNetListRefs
 {
@@ -23,6 +24,16 @@ namespace DotNetListRefs
             {
                 return 1;
             }
+
+            var logConfig = new LoggerConfiguration()
+                .WriteTo.Console(outputTemplate: "[{Level:u3}] {Message}\n");
+
+            if (options.Verbose)
+            {
+                logConfig.MinimumLevel.Debug();
+            }
+
+            Log.Logger = logConfig.CreateLogger();
 
             var services = new ServiceCollection();
 

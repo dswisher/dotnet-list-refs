@@ -6,6 +6,7 @@ using System.IO.Abstractions;
 using DotNetListRefs.Services;
 using DotNetListRefs.Writers;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DotNetListRefs
 {
@@ -15,11 +16,18 @@ namespace DotNetListRefs
         {
             services.AddSingleton<App>();
 
-            services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
             services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
+            services.AddSingleton<IProjectProcessor, BuildalyzerProjectProcessor>();
+            services.AddSingleton<ISolutionProcessor, BuildalyzerSolutionProcessor>();
 
             // TODO - based on the output type settings, add the proper writer
             services.AddSingleton<IGraphWriter, TextGraphWriter>();
+
+            services.AddLogging(c =>
+            {
+                c.AddSerilog(dispose: true);
+            });
         }
     }
 }

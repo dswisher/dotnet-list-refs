@@ -14,12 +14,18 @@ namespace DotNetListRefs
     public class App
     {
         private readonly IProjectDiscoveryService projectDiscoveryService;
+        private readonly ISolutionProcessor solutionProcessor;
+        private readonly IProjectProcessor projectProcessor;
         private readonly IGraphWriter graphWriter;
 
         public App(IProjectDiscoveryService projectDiscoveryService,
+                   ISolutionProcessor solutionProcessor,
+                   IProjectProcessor projectProcessor,
                    IGraphWriter graphWriter)
         {
             this.projectDiscoveryService = projectDiscoveryService;
+            this.solutionProcessor = solutionProcessor;
+            this.projectProcessor = projectProcessor;
             this.graphWriter = graphWriter;
         }
 
@@ -32,10 +38,16 @@ namespace DotNetListRefs
             // Get the list of project paths that will be the starting point
             projectDiscoveryService.DiscoverProjects(options.Path, graph);
 
-            // Visit all the project/solution nodes, and expand them.
-            // TODO
+            // Process any solution nodes
+            solutionProcessor.AnalyzeSolutions(graph);
 
-            // TODO - add more stuff (nuget, etc) to the graph
+            // Process any project nodes
+            projectProcessor.AnalyzeProjects(graph);
+
+            // TODO - pull in transitive dependencies
+
+            // Enrich with info from nuget
+            // TODO
 
             // If desired, dump the graph
             if (!string.IsNullOrEmpty(options.GraphFile))

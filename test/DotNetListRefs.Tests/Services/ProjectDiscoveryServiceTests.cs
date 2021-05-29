@@ -10,6 +10,8 @@ using DotNetListRefs.Exceptions;
 using DotNetListRefs.Models;
 using DotNetListRefs.Services;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace DotNetListRefs.Tests.Services
@@ -24,6 +26,8 @@ namespace DotNetListRefs.Tests.Services
         private const string Project2 = Dir2 + "proj2.csproj";
         private const string EmptyDir = "/home/user/pending";
 
+        private readonly Mock<ILogger<ProjectDiscoveryService>> logger = new Mock<ILogger<ProjectDiscoveryService>>();
+
         private readonly ProjectDiscoveryService service;
         private readonly RefGraph graph;
 
@@ -37,7 +41,7 @@ namespace DotNetListRefs.Tests.Services
                 { EmptyDir, MockFileData.NullObject }
             });
 
-            service = new ProjectDiscoveryService(fileSystem);
+            service = new ProjectDiscoveryService(fileSystem, logger.Object);
 
             graph = new RefGraph();
         }
@@ -102,11 +106,11 @@ namespace DotNetListRefs.Tests.Services
 
             if (node is SolutionNode sln)
             {
-                sln.Path.Should().Be(expectedPath);
+                sln.SolutionPath.Should().Be(expectedPath);
             }
             else if (node is ProjectNode proj)
             {
-                proj.Path.Should().Be(expectedPath);
+                proj.ProjectPath.Should().Be(expectedPath);
             }
         }
     }
