@@ -1,6 +1,7 @@
 // Copyright (c) Doug Swisher. All Rights Reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using System.Collections.Generic;
 using System.IO;
 
 namespace DotNetListRefs.Models
@@ -8,19 +9,22 @@ namespace DotNetListRefs.Models
     public class ProjectNode : Node
     {
         public ProjectNode(string path)
-            : base(System.IO.Path.GetFileName(path))
+            : base(Path.GetFileName(path))
         {
             ProjectPath = path;
         }
 
 
+        public override string NodeType { get { return "Project"; } }
+
         public string ProjectPath { get; private set; }
+        public string ProjectAssetsFile { get; set; }
 
 
-        public override void Write(StreamWriter writer)
+        protected override void PopulateProperties(Dictionary<string, string> props)
         {
-            writer.WriteLine("[{0}] Project", Id);
-            writer.WriteLine("   Path: {0}", ProjectPath);
+            props.Add("Path", ProjectPath);
+            props.Add("Assets File", ProjectAssetsFile);
         }
     }
 }

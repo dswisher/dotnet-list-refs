@@ -5,5 +5,6 @@ obj
 src/DotNetListRefs/nupkg
 
 test/DotNetListRefs.Tests/coverage.opencover.xml
+test/DotNetListRefs.Tests/coverage.*.opencover.xml
 test/DotNetListRefs.Tests/coveragereport
 

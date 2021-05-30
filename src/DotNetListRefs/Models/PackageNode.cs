@@ -2,27 +2,22 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
-using System.IO;
 
 namespace DotNetListRefs.Models
 {
-    public class SolutionNode : Node
+    public class PackageNode : Node
     {
-        public SolutionNode(string path)
-            : base(Path.GetFileName(path))
+        public PackageNode(string name)
+            : base(name)
         {
-            SolutionPath = path;
         }
 
 
-        public override string NodeType { get { return "Solution"; } }
-
-        public string SolutionPath { get; private set; }
+        public override string NodeType { get { return "Package"; } }
 
 
         protected override void PopulateProperties(Dictionary<string, string> props)
         {
-            props.Add("Path", SolutionPath);
         }
     }
 }

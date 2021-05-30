@@ -2,27 +2,23 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
-using System.IO;
 
 namespace DotNetListRefs.Models
 {
-    public class SolutionNode : Node
+    public class IncludesEdge : Edge
     {
-        public SolutionNode(string path)
-            : base(Path.GetFileName(path))
+        public IncludesEdge(SolutionNode solutionNode, ProjectNode projectNode)
+            : base(solutionNode, projectNode)
         {
-            SolutionPath = path;
         }
 
 
-        public override string NodeType { get { return "Solution"; } }
-
-        public string SolutionPath { get; private set; }
+        public override string EdgeType { get { return "Includes"; } }
 
 
         protected override void PopulateProperties(Dictionary<string, string> props)
         {
-            props.Add("Path", SolutionPath);
+            // No properties - yet
         }
     }
 }

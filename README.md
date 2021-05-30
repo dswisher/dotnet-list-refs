@@ -1,4 +1,4 @@
-# dotnet-ref-tree
+# dotnet-list-refs
 
 This is a tool to help explore and maintain dependencies for a .NET project (primarily .NET core).
 
@@ -34,7 +34,7 @@ To test using the local bits:
     dotnet tool install --global --add-source ./nupkg dotnet-list-refs
 
     # After testing, uninstall
-    dotnet tool uninstall -g dotnetlistrefs
+    dotnet tool uninstall -g dotnet-list-refs
 
 
 * MSFT [Tutorial](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create) on creating .NET tools

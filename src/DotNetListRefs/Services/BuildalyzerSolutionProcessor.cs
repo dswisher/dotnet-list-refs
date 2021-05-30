@@ -40,7 +40,9 @@ namespace DotNetListRefs
                     numProjects += 1;
 
                     // Add an edge between the solution node and the project node
-                    // TODO
+                    var edge = new IncludesEdge(solutionNode, projNode);
+
+                    graph.AddEdge(edge);
                 }
             }
 

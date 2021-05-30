@@ -9,6 +9,6 @@ report:
 	dotnet reportgenerator -reports:coverage.opencover.xml -targetdir:coveragereport
 
 clean:
-	rm -f coverage.opencover.xml
+	rm -f coverage.*.opencover.xml coverage.opencover.xml
 	rm -rf coveragereport
 
