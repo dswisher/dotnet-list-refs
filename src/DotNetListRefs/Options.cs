@@ -13,8 +13,8 @@ namespace DotNetListRefs
         [Option("outdated", Required = false, HelpText = "Output a list of outdated dependencies, if any.")]
         public bool ShowOutdated { get; set; }
 
-        [Option("graph-file", Required = false, HelpText = "Write the reference graph to the specified file.")]
-        public string GraphFile { get; set; }
+        [Option("text-output", Required = false, HelpText = "Write a textual representation of the reference graph to the specified file.")]
+        public string TextOutputPath { get; set; }
 
         [Option("browse", Required = false, HelpText = "Start a text UI to browse the dependency graph.")]
         public bool Browse { get; set; }

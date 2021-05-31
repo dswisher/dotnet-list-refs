@@ -17,12 +17,13 @@ namespace DotNetListRefs
             services.AddSingleton<App>();
 
             services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<INuGetEnricher, NuGetEnricher>();
             services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
             services.AddSingleton<IProjectProcessor, BuildalyzerProjectProcessor>();
             services.AddSingleton<ISolutionProcessor, BuildalyzerSolutionProcessor>();
 
             // TODO - based on the output type settings, add the proper writer
-            services.AddSingleton<IGraphWriter, TextGraphWriter>();
+            services.AddSingleton<TextGraphWriter>();
 
             services.AddLogging(c =>
             {

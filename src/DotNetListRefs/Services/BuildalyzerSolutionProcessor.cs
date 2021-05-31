@@ -46,7 +46,10 @@ namespace DotNetListRefs
                 }
             }
 
-            logger.LogInformation("Analyzed {NumSolutions} solutions and added {NumProjects} projects to the graph.", numSolutions, numProjects);
+            if (numSolutions > 0)
+            {
+                logger.LogInformation("Analyzed {NumSolutions} solutions and added {NumProjects} projects to the graph.", numSolutions, numProjects);
+            }
         }
     }
 }

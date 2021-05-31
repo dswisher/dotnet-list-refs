@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DotNetListRefs.Writers
 {
-    public class TextGraphWriter : IGraphWriter
+    public class TextGraphWriter
     {
         private readonly ILogger logger;
 

@@ -48,6 +48,7 @@ This builds on the work of others.
     * [Analyzing .NET Core project dependencies: Finding Package References](https://www.jerriepelser.com/blog/analyze-dotnet-project-dependencies-part-1/)
     * [Analyzing .NET Core project dependencies: Finding transitive dependencies](https://www.jerriepelser.com/blog/analyze-dotnet-project-dependencies-part-2/)
 * [bjorkstromm/depends](https://github.com/bjorkstromm/depends) - Tool for generating dependency trees for .NET projects
+* [daveaglick/Buildalyzer](https://github.com/daveaglick/Buildalyzer) - A utility to perform design-time builds of .NET projects without having to think too hard about it.
 
 Command line parsing
 

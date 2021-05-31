@@ -67,40 +67,6 @@ namespace DotNetListRefs
                         AddPackageReference(graph, projectNode, result.TargetFramework, packRef.Key, packRef.Value);
                     }
                 }
-
-#if false
-                foreach (var item in results)
-                {
-                    logger.LogInformation("   Target Framework: {Framework}", item.TargetFramework);
-
-                    // logger.LogInformation("      Project Assets File: {Path}", item.GetProperty("ProjectAssetsFile"));
-
-                    // foreach (var projRef in item.ProjectReferences)
-                    // {
-                    //     logger.LogInformation("      Project Reference: {ProjRef}", projRef);
-                    // }
-
-                    // foreach (var projRef in item.References)
-                    // {
-                    //     // logger.LogInformation("      Reference: {Ref}", projRef);
-                    // }
-
-                    foreach (var packRef in item.PackageReferences)
-                    {
-                        logger.LogInformation("      Package Ref: {Ref}", packRef.Key);
-
-                        foreach (var pair in packRef.Value)
-                        {
-                            logger.LogInformation("         {Key} -> {Value}", pair.Key, pair.Value);
-                        }
-                    }
-
-                    // foreach (var pair in item.Properties)
-                    // {
-                    //     logger.LogInformation("      Property: {Key} -> {Value}", pair.Key, pair.Value);
-                    // }
-                }
-#endif
             }
         }
 
