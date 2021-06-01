@@ -48,7 +48,7 @@ namespace DotNetListRefs
 
             if (numSolutions > 0)
             {
-                logger.LogInformation("Analyzed {NumSolutions} solutions and added {NumProjects} projects to the graph.", numSolutions, numProjects);
+                logger.LogInformation("Analyzed {NumSolutions} solution(s) and added {NumProjects} projects to the graph.", numSolutions, numProjects);
             }
         }
     }

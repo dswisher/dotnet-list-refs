@@ -29,6 +29,8 @@ namespace DotNetListRefs.Models
 
         public override string EdgeType { get { return "Package Reference"; } }
 
+        public IDictionary<string, HashSet<string>> Versions { get { return versions; } }
+
 
         public void AddVersion(string version, string targetFramework)
         {

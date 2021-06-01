@@ -12,6 +12,8 @@ namespace DotNetListRefs.Models
             : base(Path.GetFileName(path))
         {
             ProjectPath = path;
+
+            Versions = new List<VersionEntry>();
         }
 
 
@@ -19,6 +21,8 @@ namespace DotNetListRefs.Models
 
         public string ProjectPath { get; private set; }
         public string ProjectAssetsFile { get; set; }
+
+        public List<VersionEntry> Versions { get; private set; }
 
 
         protected override void PopulateProperties(Dictionary<string, string> props)

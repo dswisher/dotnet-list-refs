@@ -22,9 +22,6 @@ namespace DotNetListRefs.Services
         private readonly ConcurrentDictionary<string, PackageMetadataResource> resourceCache = new ConcurrentDictionary<string, PackageMetadataResource>();
         private readonly ConcurrentDictionary<string, IEnumerable<IPackageSearchMetadata>> metaCache = new ConcurrentDictionary<string, IEnumerable<IPackageSearchMetadata>>();
 
-        private int metaCacheHits;
-        private int metaCacheMisses;
-
         public NuGetEnricher(ILogger<NuGetEnricher> logger)
         {
             this.logger = logger;
@@ -47,7 +44,7 @@ namespace DotNetListRefs.Services
 
             await Task.WhenAll(projectTasks);
 
-            logger.LogInformation("NuGet enrichment complete, {Hits} cache hits, {Misses} cache misses.", metaCacheHits, metaCacheMisses);
+            logger.LogInformation("NuGet enrichment complete.");
         }
 
 
@@ -87,17 +84,15 @@ namespace DotNetListRefs.Services
 
                     IEnumerable<IPackageSearchMetadata> packageMeta;
 
+                    // TODO - Because all the task fetching happens at the same time, the cache will always be
+                    // empty when we check it here. Need to de-dup requests beforehand.
                     if (metaCache.TryGetValue(packageKey, out packageMeta))
                     {
                         packageNode.PackageMetadata = packageMeta;
-
-                        Interlocked.Increment(ref metaCacheHits);
                     }
                     else
                     {
                         fetchTasks.Add(FetchPackageMetadataAsync(sourceMeta, source.Name, packageKey, packageNode, cancellationToken));
-
-                        Interlocked.Increment(ref metaCacheMisses);
                     }
                 }
             }

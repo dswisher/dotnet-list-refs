@@ -16,18 +16,24 @@ namespace DotNetListRefs
         private readonly ISolutionProcessor solutionProcessor;
         private readonly IProjectProcessor projectProcessor;
         private readonly INuGetEnricher nuGetEnricher;
+        private readonly IVersionChecker versionChecker;
+        private readonly OutdatedWriter outdatedWriter;
         private readonly TextGraphWriter textGraphWriter;
 
         public App(IProjectDiscoveryService projectDiscoveryService,
                    ISolutionProcessor solutionProcessor,
                    IProjectProcessor projectProcessor,
                    INuGetEnricher nuGetEnricher,
+                   IVersionChecker versionChecker,
+                   OutdatedWriter outdatedWriter,
                    TextGraphWriter graphWriter)
         {
             this.projectDiscoveryService = projectDiscoveryService;
             this.solutionProcessor = solutionProcessor;
             this.projectProcessor = projectProcessor;
             this.nuGetEnricher = nuGetEnricher;
+            this.versionChecker = versionChecker;
+            this.outdatedWriter = outdatedWriter;
             this.textGraphWriter = graphWriter;
         }
 
@@ -50,6 +56,15 @@ namespace DotNetListRefs
 
             // Enrich with info from nuget
             await nuGetEnricher.EnrichAsync(graph, cancellationToken);
+
+            // Go through and populate the package versions for each project
+            versionChecker.Check(graph);
+
+            // Unless they have requested otherwise, show the list of outdated packages
+            if (!options.HideOutdated)
+            {
+                outdatedWriter.Write(graph);
+            }
 
             // If requested, write the graph to a text file
             if (!string.IsNullOrEmpty(options.TextOutputPath))

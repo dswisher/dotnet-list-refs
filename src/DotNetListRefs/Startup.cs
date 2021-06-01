@@ -21,8 +21,9 @@ namespace DotNetListRefs
             services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
             services.AddSingleton<IProjectProcessor, BuildalyzerProjectProcessor>();
             services.AddSingleton<ISolutionProcessor, BuildalyzerSolutionProcessor>();
+            services.AddSingleton<IVersionChecker, VersionChecker>();
 
-            // TODO - based on the output type settings, add the proper writer
+            services.AddSingleton<OutdatedWriter>();
             services.AddSingleton<TextGraphWriter>();
 
             services.AddLogging(c =>

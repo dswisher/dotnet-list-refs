@@ -73,6 +73,25 @@ namespace DotNetListRefs.Writers
 
             // Write any outgoing edges
             WriteEdges(writer, "OUTGOING EDGES", node.OutEdges);
+
+            // If this is a project node, write any versions
+            if (node is ProjectNode projectNode)
+            {
+                if (projectNode.Versions.Any())
+                {
+                    writer.WriteLine();
+                    writer.WriteLine("   VERSIONS                                                                                        -------------------- Latest Update -------------------");
+                    writer.WriteLine("      Package Name                                   Target Framework  Specified           Dated?  Prerelease          Patch       Minor       Major");
+                    writer.WriteLine("      ---------------------------------------------  ----------------  ------------------  ------  ------------------  ----------  ----------  ----------");
+
+                    foreach (var version in projectNode.Versions.OrderBy(x => x.TargetFramework).ThenBy(x => x.PackageName))
+                    {
+                        writer.WriteLine("      {0,-45}  {1,-16}  {2,-18}  {3,-6}  {4,-18}  {5,-10}  {6,-10}  {7,-10}",
+                                version.PackageName, version.TargetFramework, version.SpecifiedVersion, version.IsOutdated,
+                                version.LatestPrerelease, version.LatestPatchUpdate, version.LatestMinorUpdate, version.LatestMajorUpdate);
+                    }
+                }
+            }
         }
 
 

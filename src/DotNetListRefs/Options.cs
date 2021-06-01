@@ -10,8 +10,8 @@ namespace DotNetListRefs
         [Value(0, Required = false, HelpText = "The project file, solution file, or directory to use as input.")]
         public string Path { get; set; }
 
-        [Option("outdated", Required = false, HelpText = "Output a list of outdated dependencies, if any.")]
-        public bool ShowOutdated { get; set; }
+        [Option("hide-outdated", Required = false, HelpText = "Do not show the list of outdated packages.")]
+        public bool HideOutdated { get; set; }
 
         [Option("text-output", Required = false, HelpText = "Write a textual representation of the reference graph to the specified file.")]
         public string TextOutputPath { get; set; }
