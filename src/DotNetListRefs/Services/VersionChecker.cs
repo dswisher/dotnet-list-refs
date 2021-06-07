@@ -9,7 +9,7 @@ using NuGet.Frameworks;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 
-namespace DotNetListRefs
+namespace DotNetListRefs.Services
 {
     public class VersionChecker : IVersionChecker
     {

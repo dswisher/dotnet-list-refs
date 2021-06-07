@@ -44,7 +44,7 @@ To test using the local bits:
 
 This builds on the work of others.
 
-* [dotnet-oudated](https://github.com/dotnet-outdated/dotnet-outdated) - A .NET Core global tool to display and update outdated NuGet packages in a project
+* [dotnet-outdated](https://github.com/dotnet-outdated/dotnet-outdated) - A .NET Core global tool to display and update outdated NuGet packages in a project
     * [Analyzing .NET Core project dependencies: Finding Package References](https://www.jerriepelser.com/blog/analyze-dotnet-project-dependencies-part-1/)
     * [Analyzing .NET Core project dependencies: Finding transitive dependencies](https://www.jerriepelser.com/blog/analyze-dotnet-project-dependencies-part-2/)
 * [bjorkstromm/depends](https://github.com/bjorkstromm/depends) - Tool for generating dependency trees for .NET projects

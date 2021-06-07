@@ -16,6 +16,9 @@ namespace DotNetListRefs
         [Option("text-output", Required = false, HelpText = "Write a textual representation of the reference graph to the specified file.")]
         public string TextOutputPath { get; set; }
 
+        [Option("dot-output", Required = false, HelpText = "Write DOT (graphviz) representation of the graph to the specified file.")]
+        public string DotOutputPath { get; set; }
+
         [Option("browse", Required = false, HelpText = "Start a text UI to browse the dependency graph.")]
         public bool Browse { get; set; }
 
@@ -24,5 +27,8 @@ namespace DotNetListRefs
 
         [Option('v', "verbose", Required = false, HelpText = "Set output to verbose messages.")]
         public bool Verbose { get; set; }
+
+        [Option("msbuild", Required = false, HelpText = "Use MSBuild to analyze projects, rather than Buildalyzer")]
+        public bool UseMsbuild { get; set; }
     }
 }

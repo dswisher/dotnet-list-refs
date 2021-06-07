@@ -19,12 +19,22 @@ namespace DotNetListRefs
             services.AddSingleton<IFileSystem, FileSystem>();
             services.AddSingleton<INuGetEnricher, NuGetEnricher>();
             services.AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>();
-            services.AddSingleton<IProjectProcessor, BuildalyzerProjectProcessor>();
             services.AddSingleton<ISolutionProcessor, BuildalyzerSolutionProcessor>();
             services.AddSingleton<IVersionChecker, VersionChecker>();
 
+            if (options.UseMsbuild)
+            {
+                services.AddSingleton<IProjectProcessor, MsbuildProjectProcessor>();
+                services.AddSingleton<IDotNetRunner, DotNetRunner>();
+            }
+            else
+            {
+                services.AddSingleton<IProjectProcessor, BuildalyzerProjectProcessor>();
+            }
+
             services.AddSingleton<OutdatedWriter>();
             services.AddSingleton<TextGraphWriter>();
+            services.AddSingleton<DotGraphWriter>();
 
             services.AddLogging(c =>
             {

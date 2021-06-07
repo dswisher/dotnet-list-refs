@@ -19,6 +19,7 @@ namespace DotNetListRefs
         private readonly IVersionChecker versionChecker;
         private readonly OutdatedWriter outdatedWriter;
         private readonly TextGraphWriter textGraphWriter;
+        private readonly DotGraphWriter dotGraphWriter;
 
         public App(IProjectDiscoveryService projectDiscoveryService,
                    ISolutionProcessor solutionProcessor,
@@ -26,7 +27,8 @@ namespace DotNetListRefs
                    INuGetEnricher nuGetEnricher,
                    IVersionChecker versionChecker,
                    OutdatedWriter outdatedWriter,
-                   TextGraphWriter graphWriter)
+                   TextGraphWriter textGraphWriter,
+                   DotGraphWriter dotGraphWriter)
         {
             this.projectDiscoveryService = projectDiscoveryService;
             this.solutionProcessor = solutionProcessor;
@@ -34,7 +36,8 @@ namespace DotNetListRefs
             this.nuGetEnricher = nuGetEnricher;
             this.versionChecker = versionChecker;
             this.outdatedWriter = outdatedWriter;
-            this.textGraphWriter = graphWriter;
+            this.textGraphWriter = textGraphWriter;
+            this.dotGraphWriter = dotGraphWriter;
         }
 
 
@@ -76,7 +79,10 @@ namespace DotNetListRefs
             // TODO - write JSON
 
             // If requested, write the graph to a DOT file (GraphViz)
-            // TODO - write DOT
+            if (!string.IsNullOrEmpty(options.DotOutputPath))
+            {
+                dotGraphWriter.Write(graph, options.DotOutputPath);
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 bin
 obj
 
+.vscode
+
 src/DotNetListRefs/nupkg
 
 test/DotNetListRefs.Tests/coverage.opencover.xml

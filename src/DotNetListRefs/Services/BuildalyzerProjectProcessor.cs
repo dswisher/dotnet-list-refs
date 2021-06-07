@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Buildalyzer;
+using DotNetListRefs.Helpers;
 using DotNetListRefs.Models;
 using Microsoft.Extensions.Logging;
 
-namespace DotNetListRefs
+namespace DotNetListRefs.Services
 {
     public class BuildalyzerProjectProcessor : IProjectProcessor
     {
@@ -85,33 +86,8 @@ namespace DotNetListRefs
                 return;
             }
 
-            // Look to see if this package already exists in the graph.
-            var packageNode = graph.Nodes
-                .OfType<PackageNode>()
-                .Where(x => x.Name == packageName)
-                .FirstOrDefault();
-
-            if (packageNode == null)
-            {
-                packageNode = new PackageNode(packageName);
-                graph.AddNode(packageNode);
-            }
-
-            // Look to see if there is already a link between the nodes. If not, create one.
-            var edge = projectNode.OutEdges
-                .Where(x => x.ToNode == packageNode)
-                .Cast<PackageReferenceEdge>()
-                .FirstOrDefault();
-
-            if (edge == null)
-            {
-                // Edge does not exist - create it
-                edge = new PackageReferenceEdge(projectNode, packageNode);
-
-                graph.AddEdge(edge);
-            }
-
-            edge.AddVersion(version, targetFramework);
+            // Add the edge
+            graph.AddPackageReference(projectNode, targetFramework, packageName, version);
         }
 
 

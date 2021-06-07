@@ -3,7 +3,7 @@
 
 using DotNetListRefs.Models;
 
-namespace DotNetListRefs
+namespace DotNetListRefs.Services
 {
     public interface IVersionChecker
     {

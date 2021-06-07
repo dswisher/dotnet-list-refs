@@ -1,12 +1,10 @@
 // Copyright (c) Doug Swisher. All Rights Reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using DotNetListRefs.Models;
-
 namespace DotNetListRefs.Services
 {
-    public interface IProjectProcessor
+    public interface IDotNetRunner
     {
-        void AnalyzeProjects(RefGraph graph);
+        DotNetRunStatus Run(string workingDirectory, string[] arguments);
     }
 }

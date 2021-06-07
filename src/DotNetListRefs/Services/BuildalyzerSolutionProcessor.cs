@@ -7,7 +7,7 @@ using Buildalyzer;
 using DotNetListRefs.Models;
 using Microsoft.Extensions.Logging;
 
-namespace DotNetListRefs
+namespace DotNetListRefs.Services
 {
     public class BuildalyzerSolutionProcessor : ISolutionProcessor
     {
