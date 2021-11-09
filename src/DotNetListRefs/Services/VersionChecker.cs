@@ -100,7 +100,7 @@ namespace DotNetListRefs.Services
             latestVersionRange = new VersionRange(currentVersionRange, new FloatRange(NuGetVersionFloatBehavior.Patch, referencedVersion));
             latestVersion = latestVersionRange.FindBestMatch(allVersions);
 
-            if (!latestVersion.IsPrerelease)
+            if ((latestVersion != null) && !latestVersion.IsPrerelease)
             {
                 entry.LatestPatchUpdate = latestVersion?.ToString();
             }
